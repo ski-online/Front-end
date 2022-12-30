@@ -4,7 +4,7 @@
   "description": "parte back-end per il progetto ski online",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
     "start": "node app/app.js"
   },
   "repository": {
@@ -31,5 +31,9 @@
     "mongoose": "^6.8.0",
     "mongoose-express-api": "^0.0.3",
     "swagger-ui-express": "^4.6.0"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "supertest": "^6.3.3"
   }
 }

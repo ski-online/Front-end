@@ -36,7 +36,7 @@ const modificaStatoImpianto = (req, res) => {
         Impianto.updateOne({_id: req.params.id}, {statoApertura: !data.statoApertura}, (err, data) => {
             if(err)
                 return res.status(500).json({Error: err})
-            return res.status(204)
+            return res.status(204).json({})
         })
     })
 }

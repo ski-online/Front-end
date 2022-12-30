@@ -36,6 +36,7 @@
 *.txt
 *.DS_Store
 *.env
+coverage
 
 #node modules
 node_modules*
