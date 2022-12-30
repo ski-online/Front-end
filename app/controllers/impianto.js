@@ -9,22 +9,6 @@ const getAllImpianti = (req, res) => {
     })
 }
 
-const creaImpianto = (req, res) => {
-    if(!(req.body.nome && req.body.portataOraria)){
-        return res.status(400).json({message: 'dati inseriti nel formato sbagliato'})
-    }
-    const newImpianto = new Impianto({
-        nome: req.body.nome,
-        portataOraria: req.body.portataOraria
-    })
-    newImpianto.save((err, data) => {
-        if(err){
-            return res.status(500).json({Error: err})
-        }
-        return res.status(201).json(data)
-    })
-}
-
 const modificaStatoImpianto = (req, res) => {
     if(req.headers.livello != 'Operatore' && req.headers.livello != 'Gestore'){
         return res.status(401).json({Error: "Azione non permessa ad un utente di livello " + req.headers.livello})
@@ -41,4 +25,4 @@ const modificaStatoImpianto = (req, res) => {
     })
 }
 
-module.exports = {getAllImpianti, creaImpianto, modificaStatoImpianto}
+module.exports = {getAllImpianti, modificaStatoImpianto}

@@ -69,7 +69,6 @@ const modificaPassword = (req, res) => {
                 if(err){
                     return res.json({Error: err})
                 }else if(result){
-                    //controllo token
                     bcrypt.hash(req.body.newPassword, 5, (err, hash) => {
                         if(err)
                             return res.status(500).json({Error: err})

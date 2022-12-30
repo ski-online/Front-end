@@ -13,7 +13,6 @@ router.post('/utente', utenteController.nuovoUtente)
 router.post('/login', autenticazioneController.login)
 
 router.get('/impianto', impiantoController.getAllImpianti)
-router.post('/impianto', impiantoController.creaImpianto) //DA RIMUOVERE
 
 router.get('/affollamentoSingolo/', logController.logNegliUltimi30Minuti)
 router.get('/affollamento', logController.utentiNellUltimaOra)
