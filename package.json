@@ -1,0 +1,35 @@
+{
+  "name": "ski_online",
+  "version": "1.0.0",
+  "description": "parte back-end per il progetto ski online",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ski-online/Front-end.git"
+  },
+  "keywords": [
+    "Ski",
+    "Ingegneria",
+    "del",
+    "software"
+  ],
+  "author": "ARL Company",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ski-online/Front-end/issues"
+  },
+  "homepage": "https://github.com/ski-online/Front-end#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.8.0",
+    "mongoose-express-api": "^0.0.3",
+    "swagger-ui-express": "^4.6.0"
+  }
+}

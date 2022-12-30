@@ -1,0 +1,783 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Ski Online project",
+        "description": "Documentazione delle API Ski Online project",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Utenti",
+            "description": "API per gli utenti che utilizzano il sistema"
+        },
+        {
+            "name": "Impianti",
+            "description": "API per la gestione degli impianti sciistici nella località sciistica"
+        },
+        {
+            "name": "Log",
+            "description": "API per la gestione dei log degli accessi degli utenti agli impianti sciistici"
+        }
+    ],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/utente/{email}": {
+            "get": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Mostra l'utenza associata ad uno specifico indirizzo email",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "indirizzo email a cui è associato l'utente",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dati utente",
+                        "schema": {
+                            "$ref": "#/definitions/Utente"
+                        }
+                    },
+                    "404": {
+                        "description": "Non è stata trovata alcuna utenza associata all'indirizzo email fornito",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "dati inseriti nel formato sbagliato"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Elimina l'utenza associata all'indirizzo email specificato",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token posseduto dall'utente autenticato",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "livello",
+                        "in": "header",
+                        "description": "livello dell'utente",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "indirizzo email a cui è associato l'utente",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Utente eliminato correttamente",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "messaggio": {
+                                    "type": "string",
+                                    "example": "Utente eliminato correttamente"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Utente non autorizzato ad eseguire l'operazione",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/utente":{
+            "post": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Crea un nuovo Utente di livello Utente Registrato nel sistema",
+                "parameters": [
+                    {
+                        "name": "dati utente",
+                        "in": "body",
+                        "description": "dati utente da aggiungere al sistema",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nome": {
+                                    "type": "string",
+                                    "example": "Mario"
+                                },
+                                "cognome": {
+                                    "type": "string",
+                                    "example": "Rossi"
+                                },
+                                "email": {
+                                    "type": "string",
+                                    "example": "mariorossi@gmail.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "Marione01"
+                                },
+                                "nickname": {
+                                    "type": "string",
+                                    "example": "mariorossi0405"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Utente creato",
+                        "schema": {
+                            "$ref": "#/definitions/Utente"
+                        }
+                    },
+                    "400": {
+                        "description": "Dati inseriti nel formato sbagliato: dati non in formato json oppure non contenenti i campi nome, cognome, email e password",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "dati inseriti nel formato sbagliato"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Indirizzo email già associato ad un utente preesistente, utente non creato",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "Indirizzo email già utilizzato da un utente"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Modifica la password di un utente, richiedendo prima la password precedente alla modifica",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token posseduto dall'utente autenticato",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "livello",
+                        "in": "header",
+                        "description": "livello dell'utente",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "modifica password",
+                        "in": "body",
+                        "description": "dati richiesti per la modifica sicura",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "mariorossi@gmail.com"
+                                },
+                                "oldPassword": {
+                                    "type": "string",
+                                    "example": "Marione01"
+                                },
+                                "newPassword": {
+                                    "type": "string",
+                                    "example": "Marione02"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Password modificata correttamente"
+                    },
+                    "400": {
+                        "description": "Dati inseriti nel formato sbagliato: dati non in formato json oppure non contenenti i campi nome, cognome, email e password",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "dati inseriti nel formato sbagliato"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Password precedente alla modifica errata oppure utente non autorizzato ad effetuare l'operazione",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Utente non trovato",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "Utente non trovato"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login":{
+            "post": {
+                "tags": [
+                    "Utenti"
+                ],
+                "summary": "Effettua l'autenticazione di una utenza",
+                "parameters": [
+                    {
+                        "name": "dati utente",
+                        "in": "body",
+                        "description": "dati richiesti per autenticare un utente",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "mariorossi@gmail.com"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "Marione01"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Autenticazione effettuata con successo",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "nome": {
+                                    "type": "string"
+                                },
+                                "cognome": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "livelloUtente": {
+                                    "type": "string"
+                                },
+                                "token": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dati inseriti nel formato sbagliato: dati non in formato json oppure non contenenti i campi email e password",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "dati inseriti nel formato sbagliato"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Password errata",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "Password errata"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Indirizzo email non associato ad alcuna utenza",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "Utente non trovato"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/impianto": {
+            "get": {
+                "tags": [
+                    "Impianti"
+                ],
+                "summary": "Fornisce la lista di tutti gli impianti memorizzati",
+                "responses": {
+                    "200": {
+                        "description": "Lista degli impianti",
+                        "schema": {
+                            "$ref": "#/definitions/Impianto"
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/impianto/{id}": {
+            "put": {
+                "tags": [
+                    "Impianti"
+                ],
+                "summary": "Modifica lo stato di apertura di un impianto da aperto a chiuso o vice versa",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token posseduto dall'utente autenticato",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "livello",
+                        "in": "header",
+                        "description": "livello dell'utente",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id dell'impianto di cui si vuole modificare lo stato",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Modifica avvenuta correttamente"
+                    },
+                    "401": {
+                        "description": "Utente non autorizzato ad eseguire l'operazione",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Impianto non trovato",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "Impianto non trovato"
+                                }
+                            }
+                        }
+                    }, 
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/log/{idUtente}": {
+            "get": {
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Fornisce la lista di tutti i log di accesso ad un impianto effettuati da un utente",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token posseduto dall'utente autenticato",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "livello",
+                        "in": "header",
+                        "description": "livello dell'utente",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "idUtente",
+                        "in": "path",
+                        "description": "id dell'utente di cui si vuole ottenere la lista dei log",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista dei log collegati all'utente",
+                        "schema": {
+                            "$ref": "#/definitions/Log"
+                        }
+                    },
+                    "401": {
+                        "description": "Utente non autorizzato ad eseguire l'operazione",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/log": {
+            "post": {
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Registra un nuovo log di passaggio di un utente per un impianto",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "token posseduto dall'utente autenticato",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "livello",
+                        "in": "header",
+                        "description": "livello dell'utente",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "dati log da memorizzare",
+                        "in": "body",
+                        "description": "impianto nel quale si è effettuato l'accesso e l'utente che lo ha effettuato",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "idUtente": {
+                                    "type": "string"
+                                },
+                                "idImpianto": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Log creato correttamente",
+                        "schema": {
+                            "$ref": "#/definitions/Log"
+                        }
+                    },
+                    "400": {
+                        "description": "Dati inseriti nel formato sbagliato: dati non in formato json oppure non contenenti i campi email e password",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string",
+                                    "example": "dati inseriti nel formato sbagliato"
+                                }
+                            }
+                        }
+                    }, 
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/affollamento": {
+            "get": {
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Fornisce il numero di utenti con almeno un accesso ad un impianto nell'ultima ora",
+                "responses": {
+                    "200": {
+                        "description": "Numero di utenti",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "num": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/affollamentoSingolo": {
+            "get": {
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Fornisce per ogni impianto la percentuale di affollamento (num accessi/portata max nell'ultima mezz'ora)",
+                "responses": {
+                    "200": {
+                        "description": "Valore percentuale, il valore -1 indica che l'impianto è chiuso",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "impianto": {
+                                    "type": "string"
+                                },
+                                "perc": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Errore interno al server nell'elaborazione dei dati",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "Error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Utente": {
+            "required": [
+                "nome", "cognome", "email", "password"
+            ],
+            "properties": {
+                "nome": {
+                    "type": "string"
+                },
+                "cognome": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "livelloUtente": {
+                    "type": "string", "enum": ["Base", "Operatore", "Gestore"]
+                },
+                "nickname": {
+                    "type": "string"
+                }
+            }
+        },
+        "Impianto": {
+            "required": [
+                "nome", "portataOraria"
+            ],
+            "properties": {
+                "nome": {
+                    "type": "string"
+                },
+                "portataOraria": {
+                    "type": "number"
+                },
+                "statoApertura": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Log": {
+            "required": [
+                "impianto", "utente"
+            ],
+            "properties": {
+                "impianto": {
+                    "type": "string"
+                },
+                "utente": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}
