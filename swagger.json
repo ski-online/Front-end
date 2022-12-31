@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "localhost:8080",
+    "host": "https://front-end-production-847c.up.railway.app",
     "basePath": "/",
     "tags": [
         {

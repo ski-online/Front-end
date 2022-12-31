@@ -89,13 +89,13 @@ describe("API test", () => {
         expect(response.body).toEqual(expect.any(Object));
         expect(response.statusCode).toBe(200);
     });
-    test('test API POST /login corretta', async() => {
+    test('test API POST /login non esistente', async() => {
         const response = await request(app).post("/login")
         .send({email: "prova123@gmail.com", password: "654321"})
         expect(response.body.Error).toEqual("Utente non trovato");
         expect(response.statusCode).toBe(404);
     });
-    test('test API POST /login corretta', async() => {
+    test('test API POST /login password errata', async() => {
         const response = await request(app).post("/login")
         .send({email: "prova@gmail.com", password: "123456"})
         expect(response.body.Error).toEqual("Password errata");
