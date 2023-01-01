@@ -9,7 +9,7 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "https://front-end-production-847c.up.railway.app",
+    "host": "front-end-production-847c.up.railway.app",
     "basePath": "/",
     "tags": [
         {
@@ -25,7 +25,7 @@
             "description": "API per la gestione dei log degli accessi degli utenti agli impianti sciistici"
         }
     ],
-    "schemes": ["http"],
+    "schemes": ["https"],
     "consumes": ["application/json"],
     "produces": ["application/json"],
     "paths": {

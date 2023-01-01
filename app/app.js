@@ -9,6 +9,13 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('../swagger.json')
 app.use(express.json())
 
+//enable cross-origin request
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "front-end-production-847c.up.railway.app"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use('/', routes)
